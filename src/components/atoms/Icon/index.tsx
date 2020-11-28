@@ -19,7 +19,14 @@ export const Icon: FC<IconProps> = ({
     <Image
       source={{ uri: src }}
       fadeDuration={0}
-      style={{ width, height, borderColor: "#999", borderWidth: 1, ...style }}
+      style={{
+        width,
+        height,
+        borderColor: "rgba(0,0,0,0.04)",
+        borderWidth: 1,
+        borderRadius: "50%",
+        ...style,
+      }}
     />
   );
 };
