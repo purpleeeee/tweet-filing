@@ -87,6 +87,14 @@ class Client {
     };
   };
 
+  logout = () => {
+    this.consumerKey = "";
+    this.cunsumerSecret = "";
+    this.oauthToken = "";
+    this.oauthTokenSecret = "";
+    this.tokenRequestHeaderParams = "";
+  };
+
   api = async <T>(
     method: Method,
     endpoint: string,

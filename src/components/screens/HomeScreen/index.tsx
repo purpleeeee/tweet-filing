@@ -1,23 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, SafeAreaView, Text, View, FlatList } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import {
+  StyleSheet,
+  SafeAreaView,
+  Text,
+  View,
+  FlatList,
+  Button,
+} from "react-native";
 import { useTwitter } from "../../../lib/Twitter";
 import { Status as Tweet } from "twitter-d";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export const HomeScreen: React.FC = () => {
   const [favorites, setFavorites] = useState<any[]>();
+  const { setUser } = useContext(AuthContext);
   const { twitter } = useTwitter();
   useEffect(() => {
     twitter.get("favorites/list.json").then((res: any) => setFavorites(res));
-    console.log(favorites);
   }, []);
-  console.log("favo", favorites);
   return (
     <SafeAreaView style={styles.container}>
       <Text>Home</Text>
       <FlatList
         data={favorites}
         renderItem={({ item }) => {
-          return <Text>{item.text}</Text>;
+          return <Text key={item.id_str}>{item.text}</Text>;
+        }}
+      />
+      <Button
+        title="logout"
+        onPress={() => {
+          twitter.logout();
+          setUser(undefined);
         }}
       />
     </SafeAreaView>

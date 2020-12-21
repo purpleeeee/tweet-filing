@@ -21,9 +21,7 @@ export const useTwitter = (props?: useTwitterProps) => {
   );
 
   const login = async (callback_url?: string) => {
-    console.log("これからログイン");
     const url = await client.getLoginUrl(callback_url);
-    console.log("loginしたよ", url);
     setAuthURL(url);
     setVisible(true);
   };
@@ -104,6 +102,7 @@ export const useTwitter = (props?: useTwitterProps) => {
   return {
     twitter: {
       login,
+      logout: client.logout,
       getAccessToken: (): AccessToken => ({
         oauth_token: client.oauthToken,
         oauth_token_secret: client.oauthTokenSecret,
