@@ -7,7 +7,6 @@ import {
   Button,
 } from "react-native";
 import { AuthContext } from "../../contexts/AuthContext";
-import { auth } from "../../../lib/firebase";
 import { TWITTER_API_KEY, TWITTER_API_SECRET } from "@env";
 import { useTwitter } from "../../../lib/Twitter";
 
@@ -30,7 +29,6 @@ export const AuthScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <ActivityIndicator size="large" />
       <Text>ログイン中...</Text>
-      {/* <Button title="hoge" onPress={auth} /> */}
       <Button
         title="ログインする"
         onPress={() => {
