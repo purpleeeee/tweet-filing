@@ -1,15 +1,14 @@
 import React, { FC } from "react";
-
 import { Image } from "react-native";
 
-type IconProps = {
+type AvatarIconProps = {
   src: string;
   width?: number;
   height?: number;
   style?: object;
 };
 
-export const Icon: FC<IconProps> = ({
+export const AvatarIcon: FC<AvatarIconProps> = ({
   src,
   width = 35,
   height = 35,
@@ -24,7 +23,7 @@ export const Icon: FC<IconProps> = ({
         height,
         borderColor: "rgba(0,0,0,0.04)",
         borderWidth: 1,
-        borderRadius: "50%",
+        borderRadius: width / 2,
         ...style,
       }}
     />
