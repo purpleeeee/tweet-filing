@@ -1,53 +1,60 @@
-import { Tweet } from "./tweet";
+// import { Tweet } from "./tweet";
 
-export interface UserDescriptionEntity {
-  urls?: UrlEntity[] | null;
-}
-
-export interface UrlEntity {
-  display_url?: string;
-  expanded_url?: string;
-  indices?: [number, number] | null;
-  url: string;
-}
-
-export interface UserUrlEntity {
-  urls?: UrlEntity[] | null;
-}
-export interface UserEntities {
-  description: UserDescriptionEntity;
-  url?: UserUrlEntity | null;
-}
-
-export interface FullUser {
-  created_at: string;
-  default_profile_image: boolean;
-  default_profile: boolean;
-  description?: string | null;
-  entities: UserEntities;
-  favourites_count: number;
-  followers_count: number;
-  friends_count: number;
-  id_str: string;
-  id: number;
-  listed_count: number;
-  location?: string | null;
+export type User = {
   name: string;
-  profile_banner_url?: string;
-  profile_image_url_https: string;
-  protected: boolean;
   screen_name: string;
-  status?: Tweet;
-  statuses_count: number;
-  url?: string | null;
-  verified: boolean;
-  withheld_in_countries?: string[];
-  withheld_scope?: string;
-}
+  profile_image_url: string;
+  profile_image_url_https: string;
+};
 
-export interface TrimmedUser {
-  id_str: string;
-  id: number;
-}
+// export interface UserDescriptionEntity {
+//   urls?: UrlEntity[] | null;
+// }
 
-export type User = TrimmedUser | FullUser;
+// export interface UrlEntity {
+//   display_url?: string;
+//   expanded_url?: string;
+//   indices?: [number, number] | null;
+//   url: string;
+// }
+
+// export interface UserUrlEntity {
+//   urls?: UrlEntity[] | null;
+// }
+// export interface UserEntities {
+//   description: UserDescriptionEntity;
+//   url?: UserUrlEntity | null;
+// }
+
+// export interface FullUser {
+//   created_at: string;
+//   default_profile_image: boolean;
+//   default_profile: boolean;
+//   description?: string | null;
+//   entities: UserEntities;
+//   favourites_count: number;
+//   followers_count: number;
+//   friends_count: number;
+//   id_str: string;
+//   id: number;
+//   listed_count: number;
+//   location?: string | null;
+//   name: string;
+//   profile_banner_url?: string;
+//   profile_image_url_https: string;
+//   protected: boolean;
+//   screen_name: string;
+//   status?: Tweet;
+//   statuses_count: number;
+//   url?: string | null;
+//   verified: boolean;
+//   withheld_in_countries?: string[];
+//   withheld_scope?: string;
+// }
+
+// export interface TrimmedUser {
+//   id_str: string;
+//   id: number;
+// }
+
+// export type User = TrimmedUser | FullUser;
