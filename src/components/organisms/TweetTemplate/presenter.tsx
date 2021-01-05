@@ -255,11 +255,11 @@ const _TweetTemplatePresenter: FC<TweetTemplatePresenterProps> = ({
               }}
             >
               <Text style={{ fontWeight: "bold" }}>{tweet.retweet_count}</Text>
-              <Text>件のリツイート</Text>
+              <Text style={{ color: "#5B7083" }}>件のリツイート</Text>
             </View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={{ fontWeight: "bold" }}>{tweet.favorite_count}</Text>
-              <Text>件のいいね</Text>
+              <Text style={{ color: "#5B7083" }}>件のいいね</Text>
             </View>
           </View>
         )}
@@ -287,7 +287,7 @@ const _TweetTemplatePresenter: FC<TweetTemplatePresenterProps> = ({
               color="#c4cfd6"
             />
             {!isDetail && tweet.retweet_count !== 0 && (
-              <Text style={{ paddingHorizontal: 5 }}>
+              <Text style={{ paddingHorizontal: 5, color: "#5B7083" }}>
                 {tweet.retweet_count}
               </Text>
             )}
@@ -306,7 +306,7 @@ const _TweetTemplatePresenter: FC<TweetTemplatePresenterProps> = ({
               color="#e0255e"
             />
             {!isDetail && tweet.favorite_count !== 0 && (
-              <Text style={{ paddingHorizontal: 5 }}>
+              <Text style={{ paddingHorizontal: 5, color: "#5B7083" }}>
                 {tweet.favorite_count}
               </Text>
             )}
