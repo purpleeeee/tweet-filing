@@ -1,16 +1,8 @@
-import React, { FC, useRef } from "react";
-import {
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  Dimensions,
-} from "react-native";
+import React, { FC } from "react";
+import { View, Image, Text, TouchableOpacity, ScrollView } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Tweet, VideoVariant } from "../../../types/tweet";
+import { Tweet } from "../../../types/tweet";
 // import ImageView from "react-native-image-viewing";
-import VideoPlayer from "expo-video-player";
 
 import { VideoModal } from "../VideoModal";
 import { PhotoModal } from "../PhotoModal";

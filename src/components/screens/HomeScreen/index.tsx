@@ -1,31 +1,110 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  useCallback,
+} from "react";
 import {
   StyleSheet,
   SafeAreaView,
-  Text,
-  View,
   FlatList,
   Button,
+  Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import { useTwitter } from "../../../lib/Twitter";
-import { Status as Tweet } from "twitter-d";
 import { AuthContext } from "../../contexts/AuthContext";
+import { TweetTemplate } from "../../organisms/TweetTemplate";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { Tweet } from "../../../types/tweet";
+import { BigNumber } from "bignumber.js";
+import { RootStackParamList } from "../../../types/navigation";
 
-export const HomeScreen: React.FC = () => {
-  const [favorites, setFavorites] = useState<any[]>();
+const { width } = Dimensions.get("window");
+
+type HomeScreenProps = {
+  navigation: StackNavigationProp<RootStackParamList, "Home">;
+};
+
+export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
+  const [favorites, setFavorites] = useState<Tweet[]>([]);
+
   const { setUser } = useContext(AuthContext);
   const { twitter } = useTwitter();
+
+  const unmounted = useRef(true);
   useEffect(() => {
-    twitter.get("favorites/list.json").then((res: any) => setFavorites(res));
+    if (unmounted.current) {
+      twitter
+        .get("favorites/list.json", {
+          count: 100,
+          tweet_mode: "extended",
+        })
+        .then((res: any) => setFavorites([...res]));
+    }
+
+    return () => {
+      unmounted.current = false;
+    };
   }, []);
+
+  // const dummy: Tweet = {
+  //   created_at: "2020/11/20",
+  //   favorite_count: 23,
+  //   favorited: true,
+  //   retweet_count: 100,
+  //   retweeted: false,
+  //   text: "hogeeeeeeeeeeeeeee",
+  //   user: {
+  //     name: "むらさき",
+  //     screen_name: "murasakiiii",
+  //     profile_image_url_https:
+  //       "https://pbs.twimg.com/profile_images/1337775785004810242/99fFaPbW_normal.jpg",
+  //   },
+  // };
+  const getMoreTweet = useCallback(() => {
+    const max_id = new BigNumber(favorites.slice(-1)[0]?.id_str)
+      .minus(1)
+      .c?.join("");
+
+    twitter
+      .get("favorites/list.json", {
+        count: 100,
+        max_id: max_id,
+      })
+      .then((res: any) => setFavorites([...favorites, ...res]));
+  }, [favorites]);
+
+  const onPressTweet = (tweet: Tweet) => {
+    navigation.navigate("TweetDetail", { tweet });
+  };
+
+  const renderItem = useCallback(({ item }: { item: Tweet }) => {
+    return (
+      <TweetTemplate
+        key={item.id_str}
+        onPress={() => onPressTweet(item)}
+        tweet={item}
+      />
+    );
+  }, []);
+
+  const keyExtractor = useCallback((item: Tweet) => {
+    return item.id_str;
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Home</Text>
       <FlatList
-        data={favorites}
-        renderItem={({ item }) => {
-          return <Text key={item.id_str}>{item.text}</Text>;
-        }}
+        data={favorites || []}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        ListEmptyComponent={
+          <ActivityIndicator size="large" style={{ marginTop: 10 }} />
+        }
+        onEndReached={getMoreTweet}
+        onEndReachedThreshold={0.3}
       />
       <Button
         title="logout"
@@ -41,8 +120,7 @@ export const HomeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: width,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
   },
 });
