@@ -19,13 +19,14 @@ export interface Tweet {
       media_url_https: string;
       type: "photo" | "video";
       video_info?: {
-        variants: [
-          {
-            content_type: string;
-            url: string;
-          }
-        ];
+        variants: VideoVariant[];
       };
     }[];
   };
 }
+
+export type VideoVariant = {
+  bitrate?: number;
+  content_type?: string;
+  url?: string;
+};
