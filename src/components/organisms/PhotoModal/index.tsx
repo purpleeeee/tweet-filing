@@ -5,17 +5,17 @@ import ViewPager from "@react-native-community/viewpager";
 import { Ionicons } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 
-type MediaModalProps = {
+type PhotoModalProps = {
   onRequestClose: () => void;
   imageIndex: number;
-  images: any[];
+  media: any[];
   isVisible: boolean;
 };
 
-export const MediaModal: FC<MediaModalProps> = ({
+export const PhotoModal: FC<PhotoModalProps> = ({
   onRequestClose,
   imageIndex,
-  images,
+  media,
   isVisible,
 }) => {
   const headerHeight = useHeaderHeight();
@@ -67,8 +67,9 @@ export const MediaModal: FC<MediaModalProps> = ({
             style={{ flex: 1 }}
             pageMargin={12}
           >
-            {images.map((img, index) => (
+            {media.map((img, index) => (
               <View
+                key={index}
                 style={{
                   flex: 1,
                   justifyContent: "center",
@@ -76,7 +77,6 @@ export const MediaModal: FC<MediaModalProps> = ({
                 }}
               >
                 <Image
-                  key={index}
                   source={{ uri: img.uri }}
                   style={{ width: "100%", height: "100%" }}
                   resizeMode="contain"

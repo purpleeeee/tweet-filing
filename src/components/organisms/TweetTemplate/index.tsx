@@ -2,6 +2,7 @@ import React, { FC, useState, useMemo } from "react";
 import { Tweet } from "../../../types/tweet";
 import { TweetTemplatePresenter } from "./presenter";
 import { format } from "date-fns";
+import { findHighestBitrate } from "../../../utils/twitter";
 
 type TweetTemplateProps = {
   onPress?: () => void;
@@ -32,14 +33,22 @@ export const TweetTemplate: FC<TweetTemplateProps> = ({
     },
   };
 
-  const images: any[] = useMemo(() => {
-    return _tweet.extended_entities?.media
-      ? _tweet.extended_entities.media.map((m) => {
-          return {
-            uri: m.media_url_https,
+  const media: any[] = useMemo(() => {
+    if (!_tweet.extended_entities?.media?.length) return [];
+
+    const photoOrVideoInfo = _tweet.extended_entities.media.map((item) => {
+      return item.type === "photo"
+        ? {
+            type: "photo",
+            uri: item.media_url_https,
+          }
+        : {
+            type: "video",
+            ...findHighestBitrate(item?.video_info?.variants!),
           };
-        })
-      : [];
+    });
+
+    return photoOrVideoInfo;
   }, [_tweet]);
 
   const onSelectImage = (index: number) => {
@@ -55,7 +64,7 @@ export const TweetTemplate: FC<TweetTemplateProps> = ({
     <TweetTemplatePresenter
       onPress={onPress}
       tweet={_tweet}
-      images={images}
+      media={media}
       imageIndex={imageIndex}
       isVisible={isVisible}
       onSelectImage={onSelectImage}

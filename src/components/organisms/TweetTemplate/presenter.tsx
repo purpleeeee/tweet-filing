@@ -1,15 +1,24 @@
-import React, { FC } from "react";
-import { View, Image, Text, TouchableOpacity, ScrollView } from "react-native";
+import React, { FC, useRef } from "react";
+import {
+  View,
+  Image,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Dimensions,
+} from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Tweet } from "../../../types/tweet";
+import { Tweet, VideoVariant } from "../../../types/tweet";
 // import ImageView from "react-native-image-viewing";
+import VideoPlayer from "expo-video-player";
 
-import { MediaModal } from "../MediaModal";
+import { VideoModal } from "../VideoModal";
+import { PhotoModal } from "../PhotoModal";
 
 type TweetTemplatePresenterProps = {
   onPress?: () => void;
   tweet: Tweet;
-  images: any[];
+  media: any[];
   imageIndex: number;
   isVisible: boolean;
   onSelectImage: (index: number) => void;
@@ -20,7 +29,7 @@ type TweetTemplatePresenterProps = {
 const _TweetTemplatePresenter: FC<TweetTemplatePresenterProps> = ({
   onPress,
   tweet,
-  images,
+  media,
   imageIndex,
   isVisible,
   onSelectImage,
@@ -155,6 +164,7 @@ const _TweetTemplatePresenter: FC<TweetTemplatePresenterProps> = ({
           </View>
 
           {/* Media */}
+
           <View
             style={{
               flexDirection: "row",
@@ -168,68 +178,75 @@ const _TweetTemplatePresenter: FC<TweetTemplatePresenterProps> = ({
               // overflow: "hidden",
             }}
           >
-            {images && images.length !== 0 && (
+            {media.map((item, index) => (
+              <>
+                {item.type === "video" ? (
+                  <VideoModal item={item} key={index} />
+                ) : (
+                  <>
+                    {/* FIX */}
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => onSelectImage(index)}
+                      activeOpacity={0.8}
+                      style={
+                        media.length === 4
+                          ? { width: "48%", margin: 2 }
+                          : media.length === 3
+                          ? { width: "48%", margin: 2 }
+                          : media.length === 2
+                          ? { width: "48%", margin: 2 }
+                          : { width: "100%" }
+                      }
+                    >
+                      <Image
+                        source={{ uri: item.uri }}
+                        style={
+                          media.length === 4
+                            ? {
+                                width: "100%",
+                                height: 90,
+                              }
+                            : media.length === 3
+                            ? {
+                                width: "100%",
+                                height: 90,
+                              }
+                            : media.length === 2
+                            ? {
+                                width: "100%",
+                                height: 180,
+                              }
+                            : {
+                                width: "100%",
+                                height: 180,
+                                borderRadius: 8,
+                                borderWidth: 1,
+                                borderColor: "#c4cfd6",
+                              }
+                        }
+                        // resizeMode="cover"
+                      />
+                    </TouchableOpacity>
+                  </>
+                )}
+              </>
+            ))}
+            {media && media.length !== 0 && (
               // <ImageView
-              //   images={images!}
+              //   media={media!}
               //   imageIndex={imageIndex}
               //   visible={isVisible}
               //   onRequestClose={onRequestClose}
               //   animationType="fade"
               // />
-              <MediaModal
+              <PhotoModal
                 onRequestClose={onRequestClose}
                 imageIndex={imageIndex}
-                images={images}
+                media={media}
                 isVisible={isVisible}
               />
             )}
-
-            {images.map((img, index) => (
-              // FIX
-              <TouchableOpacity
-                key={index}
-                onPress={() => onSelectImage(index)}
-                activeOpacity={0.8}
-                style={
-                  images.length === 4
-                    ? { width: "48%", margin: 2 }
-                    : images.length === 3
-                    ? { width: "48%", margin: 2 }
-                    : images.length === 2
-                    ? { width: "48%", margin: 2 }
-                    : { width: "100%" }
-                }
-              >
-                <Image
-                  source={{ uri: img.uri }}
-                  style={
-                    images.length === 4
-                      ? {
-                          width: "100%",
-                          height: 90,
-                        }
-                      : images.length === 3
-                      ? {
-                          width: "100%",
-                          height: 90,
-                        }
-                      : images.length === 2
-                      ? {
-                          width: "100%",
-                          height: 180,
-                        }
-                      : {
-                          width: "100%",
-                          height: 180,
-                          borderRadius: 8,
-                          borderWidth: 1,
-                          borderColor: "#c4cfd6",
-                        }
-                  }
-                  // resizeMode="cover"
-                />
-              </TouchableOpacity>
-            ))}
           </View>
           {isDetail && (
             <Text style={{ color: "#5B7083" }}>{tweet.created_at}</Text>
@@ -320,7 +337,7 @@ const _TweetTemplatePresenter: FC<TweetTemplatePresenterProps> = ({
 export const TweetTemplatePresenter: FC<TweetTemplatePresenterProps> = ({
   onPress,
   tweet,
-  images,
+  media,
   imageIndex,
   isVisible,
   onSelectImage,
@@ -332,7 +349,7 @@ export const TweetTemplatePresenter: FC<TweetTemplatePresenterProps> = ({
       <_TweetTemplatePresenter
         onPress={onPress}
         tweet={tweet}
-        images={images}
+        media={media}
         imageIndex={imageIndex}
         isVisible={isVisible}
         onSelectImage={onSelectImage}
@@ -344,7 +361,7 @@ export const TweetTemplatePresenter: FC<TweetTemplatePresenterProps> = ({
     <_TweetTemplatePresenter
       onPress={onPress}
       tweet={tweet}
-      images={images}
+      media={media}
       imageIndex={imageIndex}
       isVisible={isVisible}
       onSelectImage={onSelectImage}
